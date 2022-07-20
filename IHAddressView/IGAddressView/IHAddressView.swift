@@ -22,11 +22,9 @@ class IHAddressView: UIView {
     private var tableViewList: [UITableView] = []
     //判断是滚动还是点击
     private var isClick: Bool = false
-    private let screen_width = UIScreen.main.bounds.size.width
-    private let screen_height = UIScreen.main.bounds.size.height
     // MARK: - Lazy
     private lazy var containView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: screen_height, width: screen_width, height: IGAddressConfig.viewHeight))
+        let view = UIView(frame: CGRect(x: 0, y: IH.screen_height, width: IH.screen_width, height: IGAddressConfig.viewHeight))
         view.backgroundColor = UIColor.white
         view.setCorner(byRoundingCorners: [.topLeft, .topRight], radii: 8.0)
         return view
@@ -43,7 +41,7 @@ class IHAddressView: UIView {
     
     private lazy var cancelBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.frame = CGRect(x: screen_width - 44 - 16, y: 0, width: 44, height: 52)
+        btn.frame = CGRect(x: IH.screen_width - 44 - 16, y: 0, width: 44, height: 52)
         btn.setTitle("取消", for: .normal)
         btn.setTitleColor(IGAddressConfig.textColor, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 16)
@@ -52,13 +50,13 @@ class IHAddressView: UIView {
     }()
     
     private lazy var sepLineView: UIView = {
-        let view = UIView(frame: CGRect(x: 16, y: 52, width: screen_width - 32, height: 1))
+        let view = UIView(frame: CGRect(x: 16, y: 52, width: IH.screen_width - 32, height: 1))
         view.backgroundColor = UIColor.black.withAlphaComponent(0.12)
         return view
     }()
     
     private lazy var titleScrollView: UIScrollView = {
-        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 53, width: screen_width, height: 44))
+        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 53, width: IH.screen_width, height: 44))
         scrollView.showsHorizontalScrollIndicator = false
         return scrollView
     }()
@@ -70,7 +68,7 @@ class IHAddressView: UIView {
     }()
     
     private lazy var contentScrollView: UIScrollView = {
-        let scrollView = UIScrollView(frame: CGRect(x: 0, y: self.titleScrollView.frame.maxY, width: screen_width, height: IGAddressConfig.viewHeight - self.titleScrollView.frame.maxY))
+        let scrollView = UIScrollView(frame: CGRect(x: 0, y: self.titleScrollView.frame.maxY, width: IH.screen_width, height: IGAddressConfig.viewHeight - self.titleScrollView.frame.maxY))
         scrollView.delegate = self
         scrollView.isPagingEnabled = true
         scrollView.bounces = false
@@ -97,7 +95,7 @@ class IHAddressView: UIView {
     
     private func setupUI() {
         self.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-        self.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
+        self.frame = CGRect(x: 0, y: 0, width: IH.screen_width, height: IH.screen_height)
         IH.keyWindow.addSubview(self)
         self.addSubview(self.containView)
         self.containView.addSubview(self.titleLabel)
@@ -134,14 +132,14 @@ class IHAddressView: UIView {
             self.titleScrollView.addSubview(titleBtn)
             self.titleScrollView.contentSize = CGSize(width: x, height: 0)
         }
-        self.contentScrollView.contentSize = CGSize(width: CGFloat(self.titleList.count) * screen_width, height: 0)
+        self.contentScrollView.contentSize = CGSize(width: CGFloat(self.titleList.count) * IH.screen_width, height: 0)
     }
     
     private func setupOneTableView(btnTag: Int) {
         var tableView: UITableView
         if self.tableViewList.count == 0 {
             tableView = UITableView(frame: .zero, style: .plain)
-            tableView.frame = CGRect(x: CGFloat(btnTag) * screen_width, y: 0, width: screen_width, height: self.contentScrollView.frame.size.height)
+            tableView.frame = CGRect(x: CGFloat(btnTag) * IH.screen_width, y: 0, width: IH.screen_width, height: self.contentScrollView.frame.size.height)
             tableView.tag = btnTag
             tableView.delegate = self
             tableView.dataSource = self
@@ -155,7 +153,7 @@ class IHAddressView: UIView {
                 tableView = self.tableViewList[btnTag]
             } else {
                 tableView = UITableView(frame: .zero, style: .plain)
-                tableView.frame = CGRect(x: CGFloat(btnTag) * screen_width, y: 0, width: screen_width, height: self.contentScrollView.frame.size.height)
+                tableView.frame = CGRect(x: CGFloat(btnTag) * IH.screen_width, y: 0, width: IH.screen_width, height: self.contentScrollView.frame.size.height)
                 tableView.tag = btnTag
                 tableView.delegate = self
                 tableView.dataSource = self
@@ -187,7 +185,7 @@ class IHAddressView: UIView {
             self.lineView.setGradientColor(colors: [IGAddressConfig.themColor.cgColor, IGAddressConfig.themColor.withAlphaComponent(0.2).cgColor], startPoint: CGPoint(x: 0, y: 0.5), endPoint: CGPoint(x: 1.0, y: 0.5), corner: 2)
         }
         self.titleScrollView.addSubview(self.lineView)
-        self.contentScrollView.contentOffset = CGPoint(x: CGFloat(btn.tag) * screen_width, y: 0)
+        self.contentScrollView.contentOffset = CGPoint(x: CGFloat(btn.tag) * IH.screen_width, y: 0)
     }
 }
 
@@ -196,14 +194,14 @@ extension IHAddressView {
         self.callBackBlock = completion
         setupUI()
         UIView.animate(withDuration: 0.25) { [self] in
-            self.containView.frame = CGRect(x: 0, y: screen_height - IGAddressConfig.viewHeight, width: screen_width, height: IGAddressConfig.viewHeight)
+            self.containView.frame = CGRect(x: 0, y: IH.screen_height - IGAddressConfig.viewHeight, width: IH.screen_width, height: IGAddressConfig.viewHeight)
         }
         setupAllTitle(index: 0)
     }
     
     private func dismiss() {
         UIView.animate(withDuration: 0.25) { [self] in
-            self.containView.frame = CGRect(x: 0, y: screen_height, width: screen_width, height: IGAddressConfig.viewHeight)
+            self.containView.frame = CGRect(x: 0, y: IH.screen_height, width: IH.screen_width, height: IGAddressConfig.viewHeight)
         } completion: { (finish) in
             if finish {
                 self.removeFromSuperview()
@@ -216,7 +214,7 @@ extension IHAddressView {
 extension IHAddressView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == self.contentScrollView {
-            let offset: CGFloat = scrollView.contentOffset.x / screen_width
+            let offset: CGFloat = scrollView.contentOffset.x / IH.screen_width
             let offsetIndex: Int = Int(offset)
             if offset != CGFloat(offsetIndex) {
                 self.isClick = false
